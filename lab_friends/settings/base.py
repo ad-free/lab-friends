@@ -133,7 +133,7 @@ MEDIA_DIR = 'media'
 
 ENVIRONMENT = os.getenv('ENVIROMENT', 'development')
 
-if ENVIRONMENT == 'production':
+if ENVIRONMENT in ['production', 'staging']:
     try:
         from lab_friends.settings.production import *
     except ImportError:
