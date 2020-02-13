@@ -1,0 +1,2 @@
+PR_TITLE_REGEX: /\s(.*)/i
+COMMIT_MESSAGE_REGEX: /(chore|feat|fix|style): \s(.*)/i
