@@ -16,6 +16,10 @@ ALLOWED_HOSTS = ['127.0.0.1', '10.0.2.15', '0.0.0.0']
 INSTALLED_APPS += [
 	'rest_framework',
 	'rest_framework.authtoken',
+	'apps.apis',
+	'apps.address',
+	'apps.users',
+	'apps.social_network'
 ]
 
 TIME_ZONE = 'Asia/Ho_Chi_Minh'
