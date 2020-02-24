@@ -1,3 +1,5 @@
+dist: bionic # ubuntu 18.04
+
 languge: python
 
 sudo: false
