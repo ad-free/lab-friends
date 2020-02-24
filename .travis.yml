@@ -5,11 +5,14 @@ sudo: false
 python:
     - '3.8.1'
 
-addons:
-    #Travis CI does not yet support Postgres 10.1
-    #See https://github.com/travis-ci/travis-ci/issues/8537
-    # postgresql: '9.4'
-    mariadb: '10.5'
+# addons:
+#     #Travis CI does not yet support Postgres 10.1
+#     #See https://github.com/travis-ci/travis-ci/issues/8537
+#     # postgresql: '9.4'
+#     mariadb: '10.5'
+
+services:
+    - mysql
 
 install:
     - python setup.py install
