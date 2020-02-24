@@ -15,8 +15,11 @@ services:
     - mysql
 
 install:
-    - python setup.py install
+    - pip install -U pip setuptools wheel
     - pip install -r requirements.txt
 
 before_install:
-    - mysql -e 'create database lab-friends;' -u root
+    - mysql -e 'create database lab_friends;' -u root
+
+script:
+    - python manage.py test
