@@ -24,4 +24,4 @@ before_install:
     - mysql -e 'create database lab_friends;' -u root
 
 script:
-    - python manage.py test
+    - python manage.py test apps/apis/test
