@@ -5,23 +5,39 @@ languge: python
 sudo: false
 
 python:
-    - '3.8.1'
+  - '3.8.1'
 
-# addons:
-#     #Travis CI does not yet support Postgres 10.1
-#     #See https://github.com/travis-ci/travis-ci/issues/8537
-#     # postgresql: '9.4'
-#     mariadb: '10.5'
+stages:
+  - migrate
+  - test
+  - name: deploy
+    if: branch = master
 
 services:
-    - mysql
-
-install:
-    - pip install -U pip setuptools wheel
-    - pip install -r requirements.txt
+  - mysql
 
 before_install:
-    - mysql -e 'create database lab_friends;' -u root
+  - sudo apt-get install -y python3-dev libmysqlclient-dev
+  - mysql -e "CREATE USER '${MYSQL_USER}'@'localhost' IDENTIFIED BY '${MYSQL_PASSWORD}';" -u root
+  - mysql -e "GRANT ALL PRIVILEGES ON * . * TO '${MYSQL_USER}'@'localhost';"
+  - mysql -e "FLUSH PRIVILEGES;"
+  - mysql -e "create database lab_friends;" -u root
 
-script:
-    - python manage.py test apps/apis/test
+install:
+  - pip install -U pip setuptools wheel
+  - pip install -r requirements.txt
+
+jobs:
+  include:
+    - stage: test
+      script:
+        - python manage.py makemigrations
+        - python manage.py migrate
+        - python manage.py test apps/apis/test
+      on:
+        branch: dev
+    - stage: deploy
+      script:
+        - echo $TRAVIS_BRANCH
+      on:
+        branch: master
