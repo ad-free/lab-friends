@@ -1,0 +1,43 @@
+dist: bionic # ubuntu 18.04
+
+languge: python
+
+sudo: false
+
+python:
+  - '3.8.1'
+
+stages:
+  - migrate
+  - test
+  - name: deploy
+    if: branch = master
+
+services:
+  - mysql
+
+before_install:
+  - sudo apt-get install -y python3-dev libmysqlclient-dev
+  - mysql -e "CREATE USER '${MYSQL_USER}'@'localhost' IDENTIFIED BY '${MYSQL_PASSWORD}';" -u root
+  - mysql -e "GRANT ALL PRIVILEGES ON * . * TO '${MYSQL_USER}'@'localhost';"
+  - mysql -e "FLUSH PRIVILEGES;"
+  - mysql -e "create database lab_friends;" -u root
+
+install:
+  - pip install -U pip setuptools wheel
+  - pip install -r requirements.txt
+
+jobs:
+  include:
+    - stage: test
+      script:
+        - python manage.py makemigrations
+        - python manage.py migrate
+        - python manage.py test apps/apis/test
+      on:
+        branch: dev
+    - stage: deploy
+      script:
+        - echo $TRAVIS_BRANCH
+      on:
+        branch: master
