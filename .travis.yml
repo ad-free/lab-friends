@@ -42,6 +42,5 @@ jobs:
         - python manage.py test apps/apis/test
     - stage: deploy
       <<: *test-api
-      if: branch = master
       script:
         - echo $TRAVIS_BRANCH
