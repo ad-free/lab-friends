@@ -1,8 +1,14 @@
-dist: bionic # ubuntu 18.04
+dist: focal # ubuntu 20.04
 
-languge: python
+arch:
+  - amd64
+  #- ppc64le
+  #- s390x
+  #- arm64
 
-sudo: false
+os:
+  - linux
+  # - osx   # MacOS
 
 python:
   - '3.8.1'
@@ -30,14 +36,12 @@ install:
 jobs:
   include:
     - stage: test
-      script:
+      script: &test-api
         - python manage.py makemigrations
         - python manage.py migrate
         - python manage.py test apps/apis/test
-      on:
-        branch: dev
     - stage: deploy
+      if: branch = master
+      <<: *test-api
       script:
         - echo $TRAVIS_BRANCH
-      on:
-        branch: master
