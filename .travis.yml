@@ -8,7 +8,6 @@ arch:
 
 os:
   - linux
-  # - osx   # MacOS
 
 python:
   - '3.8.1'
